@@ -10,6 +10,7 @@
     "@material-ui/core": "^5.0.0-alpha.17",
     "@material-ui/icons": "^4.9.1",
     "clsx": "latest",
+    "js-cookie": "^2.2.1",
     "next": "latest",
     "prop-types": "latest",
     "react": "latest",

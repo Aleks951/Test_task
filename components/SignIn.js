@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import { useRouter } from 'next/router';
+import cookie from 'js-cookie';
 
 import Alert from '@material-ui/core/Alert';
 import IconButton from '@material-ui/core/IconButton';
@@ -23,14 +25,39 @@ import { useSelector, useDispatch } from 'react-redux';
 function Copyright() {
 
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
-        Your Website
+    <>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          marginBottom: "15px"
+        }}
+      >
+        <a href="/ru">
+          Русский
+                </a>
+        <a href="/uk" >
+          Українська
+                </a>
+        <a href="/en">
+          English
+                </a>
+        <a href="/pl" >
+          Polski
+                </a>
+        <a href="/bg" >
+          Български
+                </a>
+      </div>
+      <Typography variant="body2" color="textSecondary" align="center">
+        {'Copyright © '}
+        <Link color="inherit" href="https://material-ui.com/">
+          Your Website
       </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
+        {new Date().getFullYear()}
+        {'.'}
+      </Typography>
+    </>
   );
 }
 
@@ -72,6 +99,8 @@ export default function SignIn() {
     return (<></>);
   };
 
+  const router = useRouter();
+
   const submit = () => {
     fetch('https://dev1.glaz.systems/api/v1.2/authenticate/login?include=user%2Cpermissions', {
       method: 'POST',
@@ -94,6 +123,15 @@ export default function SignIn() {
         return res.json();
       })
       .then(data => {
+        if (severity === 'success') {
+          cookie.set('access_token', data.access_token)
+          const { lang } = router.query;
+          if (lang === undefined) {
+            router.push(`/ru/access`)
+          } else {
+            router.push(`/${lang}/access`)
+          };
+        }
         setAlertOpen({
           open: true,
           message: data.email
